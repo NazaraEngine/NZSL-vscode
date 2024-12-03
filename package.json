@@ -1,0 +1,25 @@
+{
+  "name": "nzsl-language",
+  "displayName": "NZSL Language",
+  "description": "Add support for the NZSL shader language to VS Code",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.81.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "nzsl",
+      "aliases": ["NZSL", "nzsl"],
+      "extensions": [".nzsl"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "nzsl",
+      "scopeName": "source.nzsl",
+      "path": "./syntaxes/nzsl.tmLanguage.json"
+    }]
+  }
+}

@@ -1,0 +1,260 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "NZSL",
+	"patterns": [
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#block-comments"
+		},
+		{
+			"include": "#attributes"
+		},
+		{
+			"include": "#external"
+		},
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#constants"
+		}
+	],
+	"repository": {
+		"comments": {
+			"patterns": [
+				{
+					"comment": "line comments",
+					"name": "comment.line.double-slash.nzsl",
+					"match": "\\s*//.*"
+				}
+			]
+		},
+		"block-comments": {
+			"patterns": [
+				{
+					"comment": "empty block comments",
+					"name": "comment.block.nzsl",
+					"match": "/\\*\\*/"
+				},
+				{
+					"comment": "block comments",
+					"name": "comment.block.nzsl",
+					"begin": "/\\*(?!\\*)",
+					"end": "\\*/",
+					"patterns": [
+						{
+							"include": "#block-comments"
+						}
+					]
+				}
+			]
+		},
+		"attributes": {
+			"name": "meta.attribute.nzsl",
+			"begin": "\\[",
+			"end": "\\]",
+			"patterns": [
+				{
+					"include": "#block-comments"
+				},
+				{
+					"include": "#comments"
+				},
+				{
+					"include": "#attribute_name"
+				}
+			]
+		},
+		"attribute_name": {
+			"name": "meta.attribute_name.nzsl",
+			"patterns": [
+				{
+					"name": "keyword.attribute.nzsl",
+					"match": "\\b([a-zA-Z][0-9a-zA-Z_]*)\\b"
+				},
+				{
+					"include": "#attribute_value"
+				}
+			]
+		},
+		"attribute_value": {
+			"name": "meta.attribute.nzsl",
+			"begin": "\\(",
+			"end": "\\)",
+			"patterns": [
+				{
+					"include": "#block-comments"
+				},
+				{
+					"include": "#comments"
+				},
+				{
+					"include": "#strings"
+				}
+			]
+		},
+		"constants": {
+			"patterns": [
+				{
+					"comment": "constant declarations",
+					"match": "\\b(const)\\s+([A-Z][A-Za-z0-9_]*)\\b",
+					"captures": {
+						"1": {
+							"name": "storage.type.nzsl"
+						},
+						"2": {
+							"name": "constant.other.caps.nzsl"
+						}
+					}
+				},
+				{
+					"comment": "decimal integers and floats",
+					"name": "constant.numeric.decimal.nzsl",
+					"match": "\\b\\d[\\d_]*(\\.?)[\\d_]*(?:(E)([+-])([\\d_]+))?(f32|f64|i128|i16|i32|i64|i8|isize|u128|u16|u32|u64|u8|usize)?\\b",
+					"captures": {
+						"1": {
+							"name": "punctuation.separator.dot.decimal.nzsl"
+						},
+						"2": {
+							"name": "keyword.operator.exponent.nzsl"
+						},
+						"3": {
+							"name": "keyword.operator.exponent.sign.nzsl"
+						},
+						"4": {
+							"name": "constant.numeric.decimal.exponent.mantissa.nzsl"
+						},
+						"5": {
+							"name": "entity.name.type.numeric.nzsl"
+						}
+					}
+				},
+				{
+					"comment": "hexadecimal integers",
+					"name": "constant.numeric.hex.nzsl",
+					"match": "\\b0x[\\da-fA-F_]+(i128|i16|i32|i64|i8|isize|u128|u16|u32|u64|u8|usize)?\\b",
+					"captures": {
+						"1": {
+							"name": "entity.name.type.numeric.nzsl"
+						}
+					}
+				},
+				{
+					"comment": "octal integers",
+					"name": "constant.numeric.oct.nzsl",
+					"match": "\\b0o[0-7_]+(i128|i16|i32|i64|i8|isize|u128|u16|u32|u64|u8|usize)?\\b",
+					"captures": {
+						"1": {
+							"name": "entity.name.type.numeric.nzsl"
+						}
+					}
+				},
+				{
+					"comment": "binary integers",
+					"name": "constant.numeric.bin.nzsl",
+					"match": "\\b0b[01_]+(i128|i16|i32|i64|i8|isize|u128|u16|u32|u64|u8|usize)?\\b",
+					"captures": {
+						"1": {
+							"name": "entity.name.type.numeric.nzsl"
+						}
+					}
+				},
+				{
+					"comment": "booleans",
+					"name": "constant.language.bool.nzsl",
+					"match": "\\b(true|false)\\b"
+				}
+			]
+		},
+		"types": {
+			"patterns": [
+				{
+					"comment": "builtin types",
+					"match": "\\b(bool|f32|f64|i32|u32)\\b",
+					"captures": {
+						"1": {
+							"name": "entity.name.type.primitive.nzsl"
+						}
+					}
+				},
+				{
+					"comment": "parameterized types",
+					"begin": "\\b([A-Za-z_][_A-Za-z0-9]*)(\\[)",
+					"beginCaptures": {
+						"1": {
+							"name": "entity.name.type.nzsl"
+						},
+						"2": {
+							"name": "punctuation.brackets.angle.nzsl"
+						}
+					},
+					"end": "\\]",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.brackets.angle.nzsl"
+						}
+					},
+					"patterns": [
+						{
+							"include": "#block-comments"
+						},
+						{
+							"include": "#comments"
+						},
+						{
+							"include": "#types"
+						}
+					]
+				}
+			]
+		},
+		"external": {
+			"comment": "external block",
+			"name": "meta.external.definition.nzsl",
+			"begin": "\\b(external)\\s*$",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.control.nzsl"
+				}
+			},
+			"end": "}",
+			"patterns": [
+				{
+					"include": "#block-comments"
+				},
+				{
+					"include": "#comments"
+				},
+				{
+					"include": "#types"
+				},
+				{
+					"include": "#attributes"
+				}
+			]
+		},
+		"keywords": {
+			"name": "keywords.nzsl",
+			"patterns": [
+				{
+					"name": "keyword.control.nzsl",
+					"match": "\\b(bool|const|from|if|import|module|option|while|for|return)\\b"
+				}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.double.nzsl",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.nzsl",
+					"match": "\\\\."
+				}
+			]
+		}
+	},
+	"scopeName": "source.nzsl"
+}
